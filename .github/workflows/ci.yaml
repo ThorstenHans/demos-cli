@@ -55,7 +55,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: demo_${{ steps.get_version.outputs.version }}
+          name: demo_${{ github.ref_name }}_${{ matrix.goos }}_${{ matrix.goarch }}
           path: build/
 
   release:
@@ -67,8 +67,9 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: demo_${{ github.ref_name }}
-          path: build/
+            pattern: demo_${{ github.ref_name }}_*
+            path: build/
+            merge-multiple: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
