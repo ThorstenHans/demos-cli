@@ -35,7 +35,7 @@ func getDemosPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	configDir := filepath.Join(home, ".demoapp")
+	configDir := filepath.Join(home, ".demo")
 	if err := os.MkdirAll(configDir, 0700); err != nil {
 		return "", err
 	}
