@@ -4,18 +4,18 @@
 
 ## Installation
 
-Download the `demo` binary from the recent [release page](https://github.com/ThorstenHans/demos-over-ssh/releases) and ensure it is executable (`chmod +x demo`). You can either execute the binary from the folder you've downloaded it to, or move it into your `PATH`.
+Download the `demos` binary from the recent [release page](https://github.com/ThorstenHans/demos-over-ssh/releases) and ensure it is executable (`chmod +x demos`). You can either execute the binary from the folder you've downloaded it to, or move it into your `PATH`.
 
 ## Configuration
 
-The `demo` application requires two different sets of configuration data: 
+The `demos` application requires two different sets of configuration data: 
 
 - Configuration for establishing an SSH connection to the "jump box"
 - Your actual demos
 
 ### SSH Configuration
 
-After you've downloaded the `demo` executable run the `demo configure` command. It'will prompt for your SSH configuration data. You must provide:
+After you've downloaded the `demos` executable run the `demos configure` command. It'will prompt for your SSH configuration data. You must provide:
 
 - IPv4 address of the jump box
 - Desired SSH Port (default `22`)
@@ -27,7 +27,7 @@ Configuration data is encrypted at REST and stored in your user profile (`$HOME/
 
 ### Configuring Demos
 
-Once you've provided SSH configuration data, the `demo configure` command asks if it should write the default demo to your disk. If you confirm this prompt, you can find the default demo at `$HOME/.demo/demos.json`. 
+The `demos` app comes with a sample demo backed in... However, you want to provide your own demos (obviously). To give you a head start, you can use the `demos eject` command, which will create the `$HOME/.demo/demos.json` file for you. You can add as many demos to the JSON array as you want. Here some additional information for specifying your demos:
 
 - A demo can consist of an unlimited number of steps. 
 - A demo step can either be of `kind` code (`1`) or text (`0`)
@@ -54,17 +54,18 @@ Once you've provided SSH configuration data, the `demo configure` command asks i
 
 ## Dynamic CLI Commands
 
-For each demo provided, a new sub-command is added under `demo run` using the specified `cliCommand` as command name and setting the provided `alias` as command alias.
+For each demo provided, a new sub-command is added under `demos run` using the specified `cliCommand` as command name and setting the provided `alias` as command alias.
 
-Taking the previously shown `demos.json` into context, you will end up with the following commands available as part of the `demo` CLI:
+Taking the previously shown `demos.json` into context, you will end up with the following commands available as part of the `demos` CLI:
 
 ```bash
 # default command name
-demo run load-test
+demos run load-test
 
 # command alias
-demo run lt
+demos run lt
 ```
 
+## Printing your Demos
 
-
+As demos are automatically hooked up into the CLI, you can simply execute `demos run` to get a list of all commands (demos) that could be executed. 

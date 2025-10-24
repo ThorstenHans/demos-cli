@@ -117,7 +117,7 @@ func getConfigPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	configDir := filepath.Join(home, ".demo")
+	configDir := filepath.Join(home, appDirectory)
 	if err := os.MkdirAll(configDir, 0700); err != nil {
 		return "", err
 	}

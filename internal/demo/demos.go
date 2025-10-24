@@ -30,12 +30,14 @@ const (
 	Code
 )
 
+const appDirectory = ".demo"
+
 func getDemosPath() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
 	}
-	configDir := filepath.Join(home, ".demo")
+	configDir := filepath.Join(home, appDirectory)
 	if err := os.MkdirAll(configDir, 0700); err != nil {
 		return "", err
 	}
@@ -45,13 +47,11 @@ func getDemosPath() (string, error) {
 func LoadAll() []DemoScript {
 	path, err := getDemosPath()
 	if err != nil {
-		fmt.Printf("Warn: Could not locate demos file, using default demos instead\n")
 		return GetDefaultDemos()
 	}
 
 	data, err := os.ReadFile(path)
 	if err != nil {
-		fmt.Printf("Warn: Could not read demos file, using default demos instead\n")
 		return GetDefaultDemos()
 	}
 	var demos []DemoScript
@@ -70,10 +70,22 @@ func GenerateSampleDemosFile() error {
 	}
 	path, err := getDemosPath()
 	if err != nil {
-		fmt.Printf("Warn: Could not locate demos file, using default demos instead")
+		fmt.Printf("Err: Could create app folder in user home")
 		return err
 	}
 	return os.WriteFile(path, jsonData, 0600)
+}
+
+func HasDemosFile() bool {
+	path, err := getDemosPath()
+	if err != nil {
+		return false
+	}
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	}
+	return true
 }
 
 func WannaGetDemosFileGenerated() bool {

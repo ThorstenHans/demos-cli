@@ -9,14 +9,6 @@ var configureCmd = &cobra.Command{
 	Use:   "configure",
 	Short: "(Re)Configure the application",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		err := demo.Configure()
-		if err != nil {
-			return err
-		}
-		if demo.WannaGetDemosFileGenerated() {
-			return demo.GenerateSampleDemosFile()
-		}
-		return nil
-
+		return demo.Configure()
 	},
 }

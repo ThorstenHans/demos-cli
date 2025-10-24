@@ -9,7 +9,6 @@ import (
 )
 
 func buildCommandFor(d demo.DemoScript) *cobra.Command {
-
 	return &cobra.Command{
 		Use:     d.Command,
 		Aliases: []string{d.Alias},

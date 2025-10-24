@@ -11,7 +11,7 @@ import (
 var Version = "dev" // default if not set at build time
 
 var rootCmd = &cobra.Command{
-	Use:     "demo",
+	Use:     "demos",
 	Short:   "Fermyon & Akamai Load Testing Demos for KubeCon NA",
 	Version: Version,
 }
