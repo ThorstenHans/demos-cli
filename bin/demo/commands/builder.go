@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thorstenhans/demos-over-ssh/internal/demo"
+	"github.com/thorstenhans/demos-over-ssh/internal/printer"
 )
 
 func buildCommandFor(d demo.DemoScript) *cobra.Command {
@@ -19,7 +20,12 @@ func buildCommandFor(d demo.DemoScript) *cobra.Command {
 				fmt.Printf("Error loading Configuration: %s\n", err)
 				os.Exit(1)
 			}
-			return demo.Run(d, cfg)
+			runner := demo.NewDemoRunner(
+				printer.NewInfo(),
+				printer.NewRemote(),
+				printer.NewFailure(),
+			)
+			return runner.Run(d, cfg)
 		},
 	}
 }

@@ -131,7 +131,7 @@ func GetDefaultDemos() []DemoScript {
 			Alias:            "lt",
 			ShortDescription: "Run a Sample Load Test",
 			Steps: []DemoStep{
-				{Kind: Markdown, Command: "We'll now sent 100 requests Google"},
+				{Kind: Markdown, Command: "We'll sent 100 requests to Google now"},
 				{Kind: Code, Command: "hey -c 10 -n 100 https://www.google.com"},
 				{Kind: Markdown, Command: "100 requests sent!"},
 			},

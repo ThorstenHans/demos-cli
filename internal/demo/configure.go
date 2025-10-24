@@ -23,6 +23,10 @@ type Config struct {
 	JumpBoxPassword string `json:"password"`
 }
 
+func (cfg *Config) GetJumpboxEndpoint() string {
+	return fmt.Sprintf("%s:%d", cfg.JumpBoxAddress, cfg.JumpBoxPort)
+}
+
 func Configure() error {
 	cfg := &Config{}
 
