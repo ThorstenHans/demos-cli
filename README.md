@@ -1,4 +1,4 @@
-# Demos Over SSH
+# The `demos` CLI 
 
 > TL;DR: Don't let bad conference network nuke your demos. Instead offload network intense demos to a dedicated machine and execute them over SSH. Resulting in less data being transferred over the conference network.
 
