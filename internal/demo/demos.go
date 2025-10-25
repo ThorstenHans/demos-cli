@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
-
-	"github.com/manifoldco/promptui"
 )
+
+const appDirectory = ".demos"
 
 type DemoScript struct {
 	Name             string     `json:"name"`
@@ -30,9 +29,7 @@ const (
 	Code
 )
 
-const appDirectory = ".demos"
-
-func getDemosPath() (string, error) {
+func getDemosFilePath() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
@@ -45,7 +42,7 @@ func getDemosPath() (string, error) {
 }
 
 func LoadAll() []DemoScript {
-	path, err := getDemosPath()
+	path, err := getDemosFilePath()
 	if err != nil {
 		return GetDefaultDemos()
 	}
@@ -68,7 +65,7 @@ func GenerateSampleDemosFile() error {
 	if err != nil {
 		return err
 	}
-	path, err := getDemosPath()
+	path, err := getDemosFilePath()
 	if err != nil {
 		fmt.Printf("Err: Could create app folder in user home")
 		return err
@@ -77,7 +74,7 @@ func GenerateSampleDemosFile() error {
 }
 
 func HasDemosFile() bool {
-	path, err := getDemosPath()
+	path, err := getDemosFilePath()
 	if err != nil {
 		return false
 	}
@@ -86,22 +83,6 @@ func HasDemosFile() bool {
 		return false
 	}
 	return true
-}
-
-func WannaGetDemosFileGenerated() bool {
-	prompt := promptui.Select{
-		Label: "Should I generate a demo file for you?",
-		Items: []string{"Yes", "No"},
-	}
-	_, res, err := prompt.Run()
-	if err != nil {
-		fmt.Printf("Error while processing input: %s", err)
-		return false
-	}
-	if strings.ToLower(res) == "yes" {
-		return true
-	}
-	return false
 }
 
 func ValidateDemos(demos []DemoScript) error {
@@ -132,6 +113,7 @@ func GetDefaultDemos() []DemoScript {
 			ShortDescription: "Run the sample load test",
 			Steps: []DemoStep{
 				{Kind: Markdown, Command: "We'll sent 100 requests to Google now"},
+				{Kind: Code, Command: "which hey"},
 				{Kind: Code, Command: "hey -c 10 -n 100 https://www.google.com"},
 				{Kind: Markdown, Command: "100 requests sent!"},
 			},
