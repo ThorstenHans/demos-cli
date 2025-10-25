@@ -64,7 +64,7 @@ func (r *Runner) Run(demo DemoScript, cfg *Config) error {
 		},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
-	client, err := ssh.Dial("tcp", cfg.GetJumpboxEndpoint(), config)
+	client, err := ssh.Dial("tcp", cfg.GetJumpBoxEndpoint(), config)
 	if err != nil {
 		return err
 	}

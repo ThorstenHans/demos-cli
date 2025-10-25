@@ -23,16 +23,21 @@ type Config struct {
 	JumpBoxPassword string `json:"password"`
 }
 
-func (cfg *Config) GetJumpboxEndpoint() string {
+func (cfg *Config) GetJumpBoxEndpoint() string {
 	return fmt.Sprintf("%s:%d", cfg.JumpBoxAddress, cfg.JumpBoxPort)
 }
 
 func Configure() error {
-	cfg := &Config{}
+	cfg, err := LoadConfig()
+	if err != nil || cfg == nil {
+		cfg = &Config{}
+
+	}
 
 	// Address (IPv4 validation)
 	prompt := promptui.Prompt{
-		Label: "JumpBox IPv4 Address",
+		Label:   "JumpBox IPv4 Address",
+		Default: cfg.JumpBoxAddress,
 		Validate: func(input string) error {
 			ip := net.ParseIP(input)
 			if ip == nil || ip.To4() == nil {
@@ -50,7 +55,7 @@ func Configure() error {
 	// Port (default 22)
 	portPrompt := promptui.Prompt{
 		Label:   "JumpBox Port",
-		Default: "22",
+		Default: strconv.Itoa(cfg.JumpBoxPort),
 		Validate: func(input string) error {
 			port, err := strconv.Atoi(input)
 			if err != nil || port < 1 || port > 65535 {
@@ -68,7 +73,8 @@ func Configure() error {
 
 	// Username
 	userPrompt := promptui.Prompt{
-		Label: "JumpBox Username",
+		Label:   "JumpBox Username",
+		Default: cfg.JumpBoxUser,
 		Validate: func(input string) error {
 			if len(input) == 0 {
 				return fmt.Errorf("username cannot be empty")
@@ -125,7 +131,7 @@ func getConfigPath() (string, error) {
 	if err := os.MkdirAll(configDir, 0700); err != nil {
 		return "", err
 	}
-	return filepath.Join(configDir, "demo.config"), nil
+	return filepath.Join(configDir, "demos.config"), nil
 }
 
 // deriveKey creates a 32-byte AES key from the salt

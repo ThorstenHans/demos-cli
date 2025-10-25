@@ -6,6 +6,16 @@
 
 Download the `demos` binary from the recent [release page](https://github.com/ThorstenHans/demos-over-ssh/releases) and ensure it is executable (`chmod +x demos`). You can either execute the binary from the folder you've downloaded it to, or move it into your `PATH`.
 
+## Available Sub Commands
+
+The `demos` CLI provides the following sub commands:
+
+- `set-config`: To set necessary configuration
+- `get-config`: To get necessary configuration
+- `initialize`: To generate a demos file (`%HOME/.demos/demos.json`)
+- `validate`: To validate your demos
+- `run`: To run particular demos (your demos will be added as sub command to `demos run` e.g., `demos run hello-world`)
+
 ## Configuration
 
 The `demos` application requires two different sets of configuration data: 
@@ -15,19 +25,19 @@ The `demos` application requires two different sets of configuration data:
 
 ### SSH Configuration
 
-After you've downloaded the `demos` executable run the `demos configure` command. It'will prompt for your SSH configuration data. You must provide:
+After you've downloaded the `demos` executable run the `demos set-config` command. It'will prompt for your SSH configuration data. You must provide:
 
 - IPv4 address of the jump box
 - Desired SSH Port (default `22`)
 - SSH user name
 - Password for the SSH user
 
-Configuration data is encrypted at REST and stored in your user profile (`$HOME/.demo/demo.config`).
+Configuration data is encrypted at REST and stored in your user profile (`$HOME/.demos/demos.config`).
 
 
 ### Configuring Demos
 
-The `demos` app comes with a sample demo backed in... However, you want to provide your own demos (obviously). To give you a head start, you can use the `demos eject` command, which will create the `$HOME/.demo/demos.json` file for you. You can add as many demos to the JSON array as you want. Here some additional information for specifying your demos:
+The `demos` app comes with a sample demo backed in... However, you want to provide your own demos (obviously). To give you a head start, you can use the `demos initialize` command, which will create the `$HOME/.demos/demos.json` file for you. You can add as many demos to the JSON array as you want. Here some additional information for specifying your demos:
 
 - A demo can consist of an unlimited number of steps. 
 - A demo step can either be of `kind` code (`1`) or text (`0`)

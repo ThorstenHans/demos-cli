@@ -30,7 +30,7 @@ const (
 	Code
 )
 
-const appDirectory = ".demo"
+const appDirectory = ".demos"
 
 func getDemosPath() (string, error) {
 	home, err := os.UserHomeDir()
@@ -129,7 +129,7 @@ func GetDefaultDemos() []DemoScript {
 			Name:             "Sample Load Test",
 			Command:          "load-test",
 			Alias:            "lt",
-			ShortDescription: "Run a Sample Load Test",
+			ShortDescription: "Run the sample load test",
 			Steps: []DemoStep{
 				{Kind: Markdown, Command: "We'll sent 100 requests to Google now"},
 				{Kind: Code, Command: "hey -c 10 -n 100 https://www.google.com"},
