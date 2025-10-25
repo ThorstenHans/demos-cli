@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
+	"time"
 
 	"github.com/thorstenhans/demos-over-ssh/internal/printer"
 	"golang.org/x/crypto/ssh"
@@ -22,17 +24,6 @@ func NewDemoRunner(info printer.Printer, ssh printer.Printer, failure printer.Pr
 		info:    info,
 		remote:  ssh,
 		failure: failure,
-	}
-}
-
-func (k Kind) String() string {
-	switch k {
-	case Markdown:
-		return "Markdown"
-	case Code:
-		return "Code"
-	default:
-		return "Unknown"
 	}
 }
 
@@ -58,6 +49,12 @@ func (r *Runner) Run(demo DemoScript, cfg *Config) error {
 	r.remote.Print("🤝 First Contact (Connection established)")
 	for _, step := range demo.Steps {
 		switch step.Kind {
+		case Sleep:
+			d, err := strconv.Atoi(step.Command)
+			if err != nil {
+				break
+			}
+			time.Sleep(time.Duration(d) * time.Second)
 		case Code:
 			r.info.Print(fmt.Sprintf("👽 executing: %s (over ssh)", step.Command))
 			output, err := r.runCommandOverSsh(step.Command, client)

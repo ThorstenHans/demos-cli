@@ -40,26 +40,55 @@ Configuration data is encrypted at REST and stored in your user profile (`$HOME/
 The `demos` app comes with a sample demo backed in... However, you want to provide your own demos (obviously). To give you a head start, you can use the `demos initialize` command, which will create the `$HOME/.demos/demos.json` file for you. You can add as many demos to the JSON array as you want. Here some additional information for specifying your demos:
 
 - A demo can consist of an unlimited number of steps. 
-- A demo step can either be of `kind` code (`1`) or text (`0`)
-  - Text steps are printed directly to `stdout`
-  - Every code step is executed over SSH in a dedicated session and it's output is forwarded to the local `stdout`
+- A demo step must have a `kind` specified. 
+  - `kind` must be one of ( 
+    - code (`1`)
+    - sleep (`2`)
+    - text (`0`)
+  - Steps of kind `text` are printed locally directly to `stdout`
+  - Steps of kind `sleep` are executed locally 
+  - Commands of kind `sleep` must be valid `int` values (validate by the CLI) at runtime, provided value is interpreted as seconds
+- Every code step is executed over SSH in a dedicated session and it's output is forwarded to the local `stdout`
 - A demo must have a `name`, a `cliCommand`, an `alias` and a `description`
   - `cliCommand` and `alias` have unique constraints which are enforced when loading the demos into the binary at runtime
 
-```json
+```jsonc
 [
   {
     "name": "Sample Load Test",
     "cliCommand": "load-test",
     "alias": "lt",
-    "description": "Run a Sample Load Test",
+    "description": "Run the sample load test",
     "steps": [
-      { "command": "We'll now sent 100 requests Google", "kind": 0 },
-      { "command": "hey -c 10 -n 100 https://www.google.com", "kind": 1 },
-      { "command": "100 requests sent!", "kind": 0 }
+      {
+        "command": "We'll sent 100 requests to Google now",
+        // text
+        "kind": 0
+      },
+      {
+        "command": "which hey",
+        // code
+        "kind": 1
+      },
+      {
+        "command": "6",
+        // sleep
+        "kind": 2
+      },
+      {
+        "command": "hey -c 10 -n 100 https://www.google.com",
+        // code
+        "kind": 1
+      },
+      {
+        "command": "100 requests sent!",
+        // text
+        "kind": 0
+      }
     ]
   }
 ]
+
 ``` 
 
 ## Dynamic CLI Commands

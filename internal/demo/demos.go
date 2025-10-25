@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 )
 
 const appDirectory = ".demos"
@@ -16,7 +17,6 @@ type DemoScript struct {
 	ShortDescription string     `json:"description"`
 	Steps            []DemoStep `json:"steps"`
 }
-
 type DemoStep struct {
 	Command string `json:"command"`
 	Kind    Kind   `json:"kind"`
@@ -27,7 +27,21 @@ type Kind int
 const (
 	Markdown Kind = iota
 	Code
+	Sleep
 )
+
+func (k Kind) String() string {
+	switch k {
+	case Markdown:
+		return "Markdown"
+	case Code:
+		return "Code"
+	case Sleep:
+		return "Sleep"
+	default:
+		return "Unknown"
+	}
+}
 
 func getDemosFilePath() (string, error) {
 	home, err := os.UserHomeDir()
@@ -99,6 +113,13 @@ func ValidateDemos(demos []DemoScript) error {
 			return fmt.Errorf("duplicate alias found: %q", d.Alias)
 		}
 		aliases[d.Alias] = true
+		for _, step := range d.Steps {
+			if step.Kind == Sleep {
+				if _, err := strconv.Atoi(step.Command); err != nil {
+					return fmt.Errorf("Specified sleep command of demo '%s' has invalid command. Expected an integer.\n", d.Name)
+				}
+			}
+		}
 	}
 
 	return nil
@@ -114,6 +135,7 @@ func GetDefaultDemos() []DemoScript {
 			Steps: []DemoStep{
 				{Kind: Markdown, Command: "We'll sent 100 requests to Google now"},
 				{Kind: Code, Command: "which hey"},
+				{Kind: Sleep, Command: "6"},
 				{Kind: Code, Command: "hey -c 10 -n 100 https://www.google.com"},
 				{Kind: Markdown, Command: "100 requests sent!"},
 			},
